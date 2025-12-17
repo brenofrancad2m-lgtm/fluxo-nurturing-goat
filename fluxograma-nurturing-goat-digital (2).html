@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fluxo de Nurturing Inbound | GOAT DIGITAL</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0a0d;
+            --bg-card: #141419;
+            --bg-card-hover: #1c1c24;
+            --text-primary: #ffffff;
+            --text-secondary: #8888a0;
+            --email: #3b82f6;
+            --email-glow: rgba(59, 130, 246, 0.25);
+            --whatsapp: #22c55e;
+            --whatsapp-glow: rgba(34, 197, 94, 0.25);
+            --decision: #f59e0b;
+            --decision-glow: rgba(245, 158, 11, 0.25);
+            --conversion: #10b981;
+            --conversion-glow: rgba(16, 185, 129, 0.35);
+            --lead: #8b5cf6;
+            --lead-glow: rgba(139, 92, 246, 0.25);
+            --action: #a855f7;
+            --action-glow: rgba(168, 85, 247, 0.25);
+            --rd-orange: #ff6b35;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 40px 20px 60px;
+            background-image: 
+                radial-gradient(ellipse at 10% 10%, rgba(139, 92, 246, 0.08) 0%, transparent 40%),
+                radial-gradient(ellipse at 90% 30%, rgba(59, 130, 246, 0.06) 0%, transparent 40%),
+                radial-gradient(ellipse at 50% 70%, rgba(34, 197, 94, 0.05) 0%, transparent 50%);
+        }
+
+        .container { max-width: 1400px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 35px; }
+
+        h1 {
+            font-family: 'Sora', sans-serif;
+            font-size: clamp(1.5rem, 4vw, 2.3rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff 0%, #a0a0b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .logo-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 18px; }
+        .logo { width: 44px; height: 44px; border-radius: 10px; }
+        .logo-text { font-family: 'Sora', sans-serif; font-size: 1.2rem; font-weight: 700; color: #fff; letter-spacing: 0.08em; }
+        .subtitle { color: var(--text-secondary); font-size: 0.9rem; max-width: 500px; margin: 0 auto; }
+
+        .rd-badge {
+            display: inline-flex; align-items: center; gap: 5px; margin-top: 10px;
+            padding: 5px 12px; background: rgba(255, 107, 53, 0.1);
+            border: 1px solid rgba(255, 107, 53, 0.25); border-radius: 16px;
+            font-size: 0.7rem; font-weight: 600; color: var(--rd-orange);
+        }
+        .rd-badge svg { width: 12px; height: 12px; stroke: var(--rd-orange); }
+
+        .legend {
+            display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;
+            margin-bottom: 35px; padding: 12px 20px; background: var(--bg-card);
+            border-radius: 10px; border: 1px solid rgba(255,255,255,0.05);
+        }
+        .legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.7rem; color: var(--text-secondary); }
+        .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+        .legend-dot.email { background: var(--email); }
+        .legend-dot.whatsapp { background: var(--whatsapp); }
+        .legend-dot.action { background: var(--action); }
+        .legend-dot.decision { background: var(--decision); }
+        .legend-dot.conversion { background: var(--conversion); }
+
+        .flowchart { display: flex; flex-direction: column; align-items: center; }
+
+        .node {
+            position: relative; padding: 12px 18px; border-radius: 10px;
+            background: var(--bg-card); border: 1px solid rgba(255,255,255,0.06);
+            max-width: 280px; width: 100%; text-align: center; transition: all 0.3s ease;
+        }
+        .node:hover { transform: translateY(-2px); background: var(--bg-card-hover); }
+
+        .node-icon { width: 20px; height: 20px; margin: 0 auto 5px; display: block; }
+        .node-icon svg { width: 100%; height: 100%; }
+        .node-title { font-weight: 600; font-size: 0.8rem; margin-bottom: 3px; line-height: 1.3; }
+        .node-desc { font-size: 0.68rem; color: var(--text-secondary); line-height: 1.35; }
+
+        .rd-action {
+            display: inline-block; font-size: 0.55rem; padding: 2px 5px;
+            background: rgba(255, 107, 53, 0.12); border-radius: 4px;
+            color: var(--rd-orange); margin-top: 5px; font-weight: 500;
+        }
+
+        .node.lead { border-color: var(--lead); box-shadow: 0 0 18px var(--lead-glow); }
+        .node.lead .node-title { color: var(--lead); }
+        .node.lead .node-icon svg { stroke: var(--lead); }
+
+        .node.email { border-color: var(--email); box-shadow: 0 0 14px var(--email-glow); }
+        .node.email .node-title { color: var(--email); }
+        .node.email .node-icon svg { stroke: var(--email); }
+
+        .node.whatsapp { border-color: var(--whatsapp); box-shadow: 0 0 14px var(--whatsapp-glow); }
+        .node.whatsapp .node-title { color: var(--whatsapp); }
+        .node.whatsapp .node-icon svg { stroke: var(--whatsapp); }
+
+        .node.decision { border-color: var(--decision); box-shadow: 0 0 14px var(--decision-glow); background: linear-gradient(135deg, var(--bg-card) 0%, rgba(245, 158, 11, 0.05) 100%); }
+        .node.decision .node-title { color: var(--decision); }
+        .node.decision .node-icon svg { stroke: var(--decision); }
+
+        .node.conversion { border-color: var(--conversion); box-shadow: 0 0 20px var(--conversion-glow); background: linear-gradient(135deg, var(--bg-card) 0%, rgba(16, 185, 129, 0.08) 100%); }
+        .node.conversion .node-title { color: var(--conversion); }
+        .node.conversion .node-icon svg { stroke: var(--conversion); }
+
+        .node.action { border-color: var(--action); box-shadow: 0 0 14px var(--action-glow); }
+        .node.action .node-title { color: var(--action); }
+        .node.action .node-icon svg { stroke: var(--action); }
+
+        .connector { width: 2px; height: 24px; background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 100%); position: relative; }
+        .connector::after { content: ''; position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%); border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 6px solid rgba(255,255,255,0.2); }
+        .connector.loop { background: linear-gradient(180deg, rgba(99, 102, 241, 0.3) 0%, rgba(99, 102, 241, 0.08) 100%); }
+        .connector.loop::after { border-top-color: rgba(99, 102, 241, 0.3); }
+
+        .branch-container { display: flex; gap: 25px; align-items: flex-start; justify-content: center; flex-wrap: wrap; }
+        .branch { display: flex; flex-direction: column; align-items: center; min-width: 160px; }
+
+        .branch-label { font-size: 0.62rem; padding: 3px 8px; border-radius: 10px; margin-bottom: 6px; font-weight: 600; }
+        .branch-label.yes { background: rgba(16, 185, 129, 0.1); color: var(--conversion); border: 1px solid rgba(16, 185, 129, 0.18); }
+        .branch-label.no { background: rgba(107, 114, 128, 0.1); color: #9ca3af; border: 1px solid rgba(107, 114, 128, 0.18); }
+        .branch-label.hot { background: rgba(239, 68, 68, 0.1); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.18); }
+        .branch-label.warm { background: rgba(245, 158, 11, 0.1); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.18); }
+        .branch-label.cold { background: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.18); }
+
+        .merge-point { width: 10px; height: 10px; background: var(--bg-card); border: 2px solid rgba(255,255,255,0.18); border-radius: 50%; margin: 10px 0; }
+
+        .step-number { position: absolute; top: -5px; right: -5px; width: 20px; height: 20px; background: var(--bg-dark); border: 2px solid currentColor; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.55rem; font-weight: 700; }
+        .node.email .step-number { border-color: var(--email); color: var(--email); }
+        .node.whatsapp .step-number { border-color: var(--whatsapp); color: var(--whatsapp); }
+
+        .phase-label { font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-secondary); padding: 4px 10px; background: rgba(255,255,255,0.03); border-radius: 10px; margin: 16px 0 8px 0; border: 1px solid rgba(255,255,255,0.04); }
+
+        .timing-badge { display: inline-flex; align-items: center; gap: 3px; font-size: 0.55rem; padding: 2px 5px; background: rgba(255,255,255,0.04); border-radius: 6px; color: var(--text-secondary); margin-top: 5px; }
+        .timing-badge svg { width: 9px; height: 9px; stroke: var(--text-secondary); }
+
+        .section-box { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); border-radius: 12px; padding: 14px; margin: 6px 0; max-width: 300px; }
+        .section-title { font-family: 'Sora', sans-serif; font-size: 0.7rem; font-weight: 600; color: var(--text-primary); margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; gap: 6px; }
+        .section-title svg { width: 14px; height: 14px; stroke: #818cf8; }
+
+        .mini-flow { display: flex; flex-direction: column; align-items: center; }
+        .redirect-box { font-size: 0.65rem; color: var(--conversion); padding: 6px 10px; background: rgba(16,185,129,0.06); border-radius: 5px; border: 1px dashed rgba(16,185,129,0.18); margin-top: 5px; }
+
+        .loop-indicator { display: flex; align-items: center; gap: 5px; padding: 6px 10px; background: rgba(99, 102, 241, 0.06); border: 1px dashed rgba(99, 102, 241, 0.2); border-radius: 6px; font-size: 0.62rem; color: #818cf8; margin: 10px 0; }
+        .loop-indicator svg { width: 12px; height: 12px; stroke: #818cf8; }
+
+        .differentials { max-width: 550px; margin: 30px auto 0; padding: 14px 16px; background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(6, 182, 212, 0.05) 100%); border: 1px solid rgba(16, 185, 129, 0.1); border-radius: 8px; }
+        .differentials h4 { font-size: 0.72rem; color: var(--conversion); margin-bottom: 10px; display: flex; align-items: center; gap: 5px; }
+        .differentials h4 svg { width: 14px; height: 14px; stroke: var(--conversion); }
+        .diff-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+        .diff-item { font-size: 0.62rem; color: var(--text-secondary); padding: 5px 7px; background: rgba(0,0,0,0.15); border-radius: 5px; line-height: 1.35; }
+        .diff-item strong { color: var(--text-primary); display: block; font-size: 0.65rem; margin-bottom: 1px; }
+
+        @media (max-width: 768px) {
+            .branch-container { flex-direction: column; align-items: center; gap: 18px; }
+            .branch { min-width: auto; width: 100%; max-width: 260px; }
+            .diff-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <img src="data:image/webp;base64,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" alt="GOAT DIGITAL" class="logo">
+                <span class="logo-text">GOAT DIGITAL</span>
+            </div>
+            <h1>Fluxo de Nurturing Inbound</h1>
+            <p class="subtitle">Automação multicanal com segmentação comportamental</p>
+            <span class="rd-badge">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>
+                Executável em RD Station Marketing
+            </span>
+        </header>
+
+        <div class="legend">
+            <div class="legend-item"><span class="legend-dot email"></span><span>E-mail (Fluxo)</span></div>
+            <div class="legend-item"><span class="legend-dot whatsapp"></span><span>WhatsApp</span></div>
+            <div class="legend-item"><span class="legend-dot action"></span><span>Ação RD</span></div>
+            <div class="legend-item"><span class="legend-dot decision"></span><span>Condição</span></div>
+            <div class="legend-item"><span class="legend-dot conversion"></span><span>Conversão</span></div>
+        </div>
+
+        <div class="flowchart">
+            <!-- ENTRADA -->
+            <div class="node lead">
+                <div class="node-icon"><svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"/></svg></div>
+                <div class="node-title">Lead entra via Conversão</div>
+                <div class="node-desc">Landing Page / Pop-up / Formulário RD</div>
+                <span class="rd-action">Gatilho: Conversão em LP</span>
+            </div>
+
+            <div class="connector"></div>
+            <div class="phase-label">Fase 1 — Entrada no Fluxo</div>
+
+            <!-- Ação: Tag + Score -->
+            <div class="node action">
+                <div class="node-icon"><svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z"/></svg></div>
+                <div class="node-title">Adicionar Tag + Lead Scoring</div>
+                <div class="node-desc">Tag: "fluxo-nurturing" | +10 pontos</div>
+                <span class="rd-action">Ação: Marcar Lead</span>
+            </div>
+
+            <div class="connector"></div>
+
+            <!-- E1 -->
+            <div class="node email">
+                <span class="step-number">E1</span>
+                <div class="node-icon"><svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/></svg></div>
+                <div class="node-title">Boas-vindas + Posicionamento</div>
+                <div class="node-desc">Apresentação + link trackável</div>
+                <span class="timing-badge"><svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>Imediato</span>
+            </div>
+
+            <div class="connector"></div>
+
+            <!-- Aguardar -->
+            <div class="node action" style="max-width: 180px; padding: 8px 14px;">
+                <div class="node-icon" style="width: 16px; height: 16px;"><svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg></div>
+                <div class="node-title" style="font-size: 0.72rem;">Aguardar 1 dia</div>
+                <span class="rd-action">Ação: Esperar</span>
+            </div>
+
+            <div class="connector"></div>
+
+            <!-- W1 -->
+            <div class="node whatsapp">
+                <span class="step-number">W1</span>
+                <div class="node-icon"><svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"/></svg></div>
+                <div class="node-title">Pergunta Qualificadora</div>
+                <div class="node-desc">"Qual seu maior desafio com [X]?"</div>
+                <span class="rd-action">Integração: Webhook WhatsApp</span>
+            </div>
+
+            <div class="connector"></div>
+            <div class="phase-label">Fase 2 — Segmentação por Engajamento</div>
+
+            <!-- Condição: Abriu E1? -->
+            <div class="node decision">
+                <div class="node-icon"><svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"/></svg></div>
+                <div class="node-title">Lead abriu E1?</div>
+                <span class="rd-action">Condição: Abertura de email</span>
+            </div>
+
+            <div class="connector" style="height: 10px;"></div>
+
+            <div class="branch-container">
+                <div class="branch">
+                    <span class="branch-label yes">Abriu</span>
+                    <div class="node action" style="max-width: 180px;">
+                        <div class="node-icon" style="width: 16px; height: 16px;"><svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z"/></svg></div>
+                        <div class="node-title" style="font-size: 0.72rem;">+5 pontos</div>
+                        <div class="node-desc">Tag: "engajado"</div>
+                    </div>
+                </div>
+                <div class="branch">
+                    <span class="branch-label no">Não abriu</span>
+                    <div class="node email" style="max-width: 180px;">
+                        <div class="node-icon" style="width: 16px; height: 16px;"><svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/></svg></div>
+                        <div class="node-title" style="font-size: 0.72rem;">Reenvio E1</div>
+                        <div class="node-desc">Novo assunto</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="merge-point"></div>
+
+            <!-- E2 -->
+            <div class="node email">
+                <span class="step-number">E2</span>
+                <div class="node-icon"><svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/></svg></div>
+                <div class="node-title">Dor Explícita + Material Rico</div>
+                <div class="node-desc">Problema do mercado + link trackável</div>
+                <span class="timing-badge"><svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>Dia 3</span>
+            </div>
+
+            <div class="connector"></div>
+
+            <!-- Condição: Clicou? -->
+            <div class="node decision">
+                <div class="node-icon"><svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.042 21.672 13.684 16.6m0 0-2.51 2.225.569-9.47 5.227 7.917-3.286-.672ZM12 2.25V4.5m5.834.166-1.591 1.591M20.25 10.5H18M7.757 14.743l-1.59 1.59M6 10.5H3.75m4.007-4.243-1.59-1.59"/></svg></div>
+                <div class="node-title">Clicou no link?</div>
+                <span class="rd-action">Condição: Clique em email</span>
+            </div>
+
+            <div class="connector" style="height: 10px;"></div>
+
+            <div class="branch-container">
+                <div class="branch">
+                    <span class="branch-label hot">Clicou</span>
+                    <div class="node action" style="max-width: 170px;">
+                        <div class="node-icon" style="width: 16px; height: 16px;"><svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 0 9 9.601a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z"/></svg></div>
+                        <div class="node-title" style="font-size: 0.7rem; color: #f87171;">Lead Quente</div>
+                        <div class="node-desc">+15 pts | Tag: "quente"</div>
+                    </div>
+                </div>
+                <div class="branch">
+                    <span class="branch-label warm">Só abriu</span>
+                    <div class="node action" style="max-width: 170px;">
+                        <div class="node-icon" style="width: 16px; height: 16px;"><svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"/></svg></div>
+                        <div class="node-title" style="font-size: 0.7rem; color: #fbbf24;">Lead Morno</div>
+                        <div class="node-desc">+5 pts | Tag: "morno"</div>
+                    </div>
+                </div>
+                <div class="branch">
+                    <span class="branch-label cold">Não abriu</span>
+                    <div class="node whatsapp" style="max-width: 170px;">
+                        <div class="node-icon" style="width: 16px; height: 16px;"><svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"/></svg></div>
+                        <div class="node-title" style="font-size: 0.7rem;">Resgate WPP</div>
+                        <div class="node-desc">Tag: "frio"</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="merge-point"></div>
+            <div class="phase-label">Fase 3 — Construção de Valor</div>
+
+            <!-- E3 -->
+            <div class="node email">
+                <span class="step-number">E3</span>
+                <div class="node-icon"><svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/></svg></div>
+                <div class="node-title">Mecanismo + Prova Social</div>
+                <div class="node-desc">Como funciona + depoimento</div>
+                <span class="timing-badge"><svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>Dia 6</span>
+            </div>
+
+            <div class="connector"></div>
+
+            <!-- E4 -->
+            <div class="node email">
+                <span class="step-number">E4</span>
+                <div class="node-icon"><svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/></svg></div>
+                <div class="node-title">Caso de Sucesso</div>
+                <div class="node-desc">Antes/depois com números</div>
+                <span class="timing-badge"><svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>Dia 9</span>
+            </div>
+
+            <div class="connector"></div>
+            <div class="phase-label">Fase 4 — Conversão</div>
+
+            <!-- E5 -->
+            <div class="node email">
+                <span class="step-number">E5</span>
+                <div class="node-icon"><svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/></svg></div>
+                <div class="node-title">Oferta Principal</div>
+                <div class="node-desc">CTA para Landing Page</div>
+                <span class="timing-badge"><svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>Dia 12</span>
+            </div>
+
+            <div class="connector"></div>
+
+            <!-- Condição: Converteu? -->
+            <div class="node decision">
+                <div class="node-icon"><svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg></div>
+                <div class="node-title">Converteu na LP?</div>
+                <span class="rd-action">Condição: Conversão em LP</span>
+            </div>
+
+            <div class="connector" style="height: 10px;"></div>
+
+            <div class="branch-container">
+                <div class="branch">
+                    <span class="branch-label yes">Converteu</span>
+                    <div class="node conversion">
+                        <div class="node-icon"><svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 0 1-.982-3.172M9.497 14.25a7.454 7.454 0 0 0 .981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 0 0 7.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 0 0 2.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 0 1 2.916.52 6.003 6.003 0 0 1-5.395 4.972m0 0a6.726 6.726 0 0 1-2.749 1.35m0 0a6.772 6.772 0 0 1-3.044 0"/></svg></div>
+                        <div class="node-title">Oportunidade / Venda</div>
+                        <div class="node-desc">Marcar como Oportunidade</div>
+                        <span class="rd-action">Ação: Alterar estágio funil</span>
+                    </div>
+                </div>
+                <div class="branch" style="min-width: 280px;">
+                    <span class="branch-label no">Não converteu</span>
+                    
+                    <!-- W2 -->
+                    <div class="node whatsapp">
+                        <span class="step-number">W2</span>
+                        <div class="node-icon"><svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"/></svg></div>
+                        <div class="node-title">Diagnóstico de Objeção</div>
+                        <div class="node-desc">"Ficou alguma dúvida?"</div>
+                    </div>
+
+                    <div class="connector"></div>
+
+                    <!-- E6 -->
+                    <div class="node email" style="max-width: 240px;">
+                        <span class="step-number">E6</span>
+                        <div class="node-icon"><svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/></svg></div>
+                        <div class="node-title">Quebra de Objeções + Urgência</div>
+                        <div class="node-desc">FAQ + escassez real</div>
+                        <span class="timing-badge"><svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>Dia 14</span>
+                    </div>
+
+                    <div class="connector"></div>
+
+                    <!-- Condição Final -->
+                    <div class="node decision" style="max-width: 200px;">
+                        <div class="node-icon" style="width: 16px; height: 16px;"><svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z"/></svg></div>
+                        <div class="node-title" style="font-size: 0.75rem;">Conversão final?</div>
+                    </div>
+
+                    <div class="connector" style="height: 10px;"></div>
+
+                    <div class="branch-container" style="gap: 12px;">
+                        <div class="branch" style="min-width: 90px;">
+                            <span class="branch-label yes" style="font-size: 0.58rem;">Sim</span>
+                            <div class="redirect-box" style="font-size: 0.6rem;">Oportunidade</div>
+                        </div>
+                        <div class="branch" style="min-width: 180px;">
+                            <span class="branch-label no" style="font-size: 0.58rem;">Não</span>
+                            
+                            <!-- Loop de Reativação -->
+                            <div class="section-box">
+                                <div class="section-title">
+                                    <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"/></svg>
+                                    Loop de Reativação
+                                </div>
+                                
+                                <div class="mini-flow">
+                                    <div class="node email" style="max-width: 220px; padding: 8px 12px;">
+                                        <span class="step-number">E7</span>
+                                        <div class="node-icon" style="width: 16px; height: 16px;"><svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/></svg></div>
+                                        <div class="node-title" style="font-size: 0.7rem;">Encerramento + Valor</div>
+                                        <div class="node-desc">"Sem problema, segue conteúdo"</div>
+                                    </div>
+
+                                    <div class="connector loop"></div>
+
+                                    <div class="node action" style="max-width: 220px; padding: 8px 12px;">
+                                        <div class="node-icon" style="width: 16px; height: 16px;"><svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z"/></svg></div>
+                                        <div class="node-title" style="font-size: 0.7rem;">Mover para Segmentação</div>
+                                        <div class="node-desc">Lista: "Nurturing Longo Prazo"</div>
+                                        <span class="rd-action">Ação: Alterar segmentação</span>
+                                    </div>
+
+                                    <div class="loop-indicator">
+                                        <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"/></svg>
+                                        Re-testar em 30/60/90 dias
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Diferenciais - Versão compacta -->
+            <div class="differentials">
+                <h4>
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.383a14.406 14.406 0 0 1-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 1 0-7.517 0c.85.493 1.509 1.333 1.509 2.316V18"/></svg>
+                    Diferenciais deste Fluxo
+                </h4>
+                <div class="diff-grid">
+                    <div class="diff-item"><strong>Lead Scoring Dinâmico</strong>Pontuação por abertura, clique e conversão</div>
+                    <div class="diff-item"><strong>Segmentação Comportamental</strong>Tags automáticas: quente, morno, frio</div>
+                    <div class="diff-item"><strong>Multicanal Integrado</strong>E-mail + WhatsApp via webhook RD</div>
+                    <div class="diff-item"><strong>Loop de Reativação</strong>Re-teste automático em 30/60/90 dias</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
